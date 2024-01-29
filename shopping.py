@@ -63,30 +63,50 @@ def load_data(filename):
         return evidence, labels
 
 
+def get_month(month):
+    months = [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "June",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
+    ]
+    return months.index(month)
+
+
+def get_visitor_type(visitor_type):
+    return 1 if visitor_type == "Returning_Visitor" else 0
+
+
+def get_weekend(weekend):
+    return 1 if weekend == "TRUE" else 0
+
+
 def train_model(evidence, labels):
-    """
-    Given a list of evidence lists and a list of labels, return a
-    fitted k-nearest neighbor model (k=1) trained on the data.
-    """
-    raise NotImplementedError
+    model = KNeighborsClassifier(n_neighbors=1)
+    model.fit(evidence, labels)
+    return model
 
 
 def evaluate(labels, predictions):
-    """
-    Given a list of actual labels and a list of predicted labels,
-    return a tuple (sensitivity, specificity).
+    true_positives = sum(
+        [1 for true, pred in zip(labels, predictions) if true == 1 and pred == 1]
+    )
+    true_negatives = sum(
+        [1 for true, pred in zip(labels, predictions) if true == 0 and pred == 0]
+    )
 
-    Assume each label is either a 1 (positive) or 0 (negative).
+    sensitivity = true_positives / sum(labels)
+    specificity = true_negatives / (len(labels) - sum(labels))
 
-    `sensitivity` should be a floating-point value from 0 to 1
-    representing the "true positive rate": the proportion of
-    actual positive labels that were accurately identified.
-
-    `specificity` should be a floating-point value from 0 to 1
-    representing the "true negative rate": the proportion of
-    actual negative labels that were accurately identified.
-    """
-    raise NotImplementedError
+    return sensitivity, specificity
 
 
 if __name__ == "__main__":
