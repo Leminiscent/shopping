@@ -59,7 +59,7 @@ def load_data(filename):
                     get_weekend(row[16]),  # Weekend
                 ]
             )
-            labels.append(int(row[17]))  # Label
+            labels.append(1 if row[17] == "TRUE" else 0)  # Label
         return evidence, labels
 
 
